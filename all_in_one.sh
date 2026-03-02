@@ -6322,13 +6322,13 @@ function main_return() {
     cat /tmp/xiaoya_alist
     echo -ne "${INFO} 主界面加载中...${Font}\r"
     out_tips=""
-    if ! curl -s -o /dev/null -m 4 -w '%{time_total}' --head --request GET "$(cat "${DDSREM_CONFIG_DIR}/image_mirror.txt")" &> /dev/null; then
-        if auto_choose_image_mirror; then
-            out_tips="${Green}提示：已为您自动配置Docker镜像源地址为: $(cat "${DDSREM_CONFIG_DIR}/image_mirror.txt")${Font}\n"
-        else
-            out_tips="${Red}警告：当前环境无法访问Docker镜像仓库，请输入66进入Docker镜像源设置更改镜像源${Font}\n"
-        fi
-    fi
+    # if ! curl -s -o /dev/null -m 4 -w '%{time_total}' --head --request GET "$(cat "${DDSREM_CONFIG_DIR}/image_mirror.txt")" &> /dev/null; then
+    #     if auto_choose_image_mirror; then
+    #         out_tips="${Green}提示：已为您自动配置Docker镜像源地址为: $(cat "${DDSREM_CONFIG_DIR}/image_mirror.txt")${Font}\n"
+    #     else
+    #         out_tips="${Red}警告：当前环境无法访问Docker镜像仓库，请输入66进入Docker镜像源设置更改镜像源${Font}\n"
+    #     fi
+    # fi
 
     if docker container inspect "$(cat ${DDSREM_CONFIG_DIR}/container_name/xiaoya_alist_name.txt)" > /dev/null 2>&1; then
         config_dir="$(docker inspect --format='{{range $v,$conf := .Mounts}}{{$conf.Source}}:{{$conf.Destination}}{{$conf.Type}}~{{end}}' "$(cat ${DDSREM_CONFIG_DIR}/container_name/xiaoya_alist_name.txt)" | tr '~' '\n' | grep bind | sed 's/bind//g' | grep ":/data$" | awk -F: '{print $1}')"
@@ -6523,12 +6523,12 @@ function first_init() {
         fi
     fi
 
-    INFO "设置 Docker 镜像源中..."
-    if [ ! -f "${DDSREM_CONFIG_DIR}/image_mirror.txt" ]; then
-        if ! auto_choose_image_mirror; then
-            echo 'docker.io' > ${DDSREM_CONFIG_DIR}/image_mirror.txt
-        fi
-    fi
+    # INFO "设置 Docker 镜像源中..."
+    # if [ ! -f "${DDSREM_CONFIG_DIR}/image_mirror.txt" ]; then
+    #     if ! auto_choose_image_mirror; then
+    #         echo 'docker.io' > ${DDSREM_CONFIG_DIR}/image_mirror.txt
+    #     fi
+    # fi
     if [ ! -f "${DDSREM_CONFIG_DIR}/image_mirror_user.txt" ]; then
         touch ${DDSREM_CONFIG_DIR}/image_mirror_user.txt
     fi
